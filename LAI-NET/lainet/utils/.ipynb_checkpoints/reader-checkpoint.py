@@ -8,6 +8,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
+#!usr/bin/envs python
 
 
 def load_map_file(map_file):
