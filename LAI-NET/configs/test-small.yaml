@@ -1,6 +1,6 @@
 MODEL:
     NETWORK: 'lainet'
-    WINDOW_SIZE: 250
+    WINDOW_SIZE: 500
 TRAINING:
     DEVICE: 'cpu'
     OPTIM: 'Adam'

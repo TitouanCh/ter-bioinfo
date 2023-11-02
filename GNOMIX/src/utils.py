@@ -10,7 +10,6 @@ import sys
 from time import time
 import pickle
 import gzip
-#!usr/bin/envs python
 
 
 def save_dict(D, path):
@@ -162,11 +161,19 @@ def vcf_to_npy(vcf_data, snp_pos_fmt=None, snp_ref_fmt=None, miss_fill=2, return
 
 
 
-def read_genetic_map(genetic_map_path, chm=None):
+def read_genetic_map(genetic_map_path, chm=None, header=None):
+
+    gen_map_df = pd.read_csv(genetic_map_path, delimiter="\t", header=header, comment="#", dtype=str)
+    gen_map_df.columns = ["chm","pos","pos_cm"]
     
-    gen_map_df = pd.read_csv(genetic_map_path, sep="\t", comment="#", header=None, dtype="str")
-    gen_map_df.columns = ["chm", "pos", "pos_cm"]
-    gen_map_df = gen_map_df.astype({'chm': str, 'pos': np.int64, 'pos_cm': np.float64})
+    try:
+        gen_map_df = gen_map_df.astype({'chm': str, 'pos': int, 'pos_cm': float})
+    except ValueError:
+        if header is None:
+            print("WARNING: Something wrong with genetic map format. Trying with header...")
+            return read_genetic_map(genetic_map_path, chm=chm, header=0)
+        else:
+            raise Exception("Genetic map format not understood.")
 
     if chm is not None:
         chm = str(chm)

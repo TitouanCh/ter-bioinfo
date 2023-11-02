@@ -11,7 +11,7 @@ import torch.optim as optim
 
 
 def load_map_file(map_file):
-    sample_map = pd.read_csv(map_file, sep="\t", header=1)
+    sample_map = pd.read_csv(map_file, sep="\t", header=0)
     sample_map.columns = ["sample", "ancestry"]
     ancestry_names, ancestry_labels = np.unique(sample_map['ancestry'], return_inverse=True)
     samples_list = np.array(sample_map['sample'])
