@@ -10,16 +10,22 @@ FIGSIZE = None
 MARKERSIZE = 100
 MAXCOLORS = 8
 
-LAI_PALETTE  = ["#A60303", "#3457BF", "#75BFAA", "#613673",  "#8DA6F2", "#AAAAAA", "#254F6B", "#D9414E" ]
+LAI_PALETTE  = ["#A60303", "#3457BF", "#75BFAA", "#613673",  "#FFA500"]
 CMAP = ListedColormap(LAI_PALETTE)
 
-def visualize_palette(palette=None):
+def visualize_palette(label,palette=None):
     if palette is None:
         palette = LAI_PALETTE
-    nn = 100
+    nn = 50
+    fig, ax = plt.subplots()
+
     for i, col in enumerate(palette):
-        plt.plot(np.arange(nn), np.repeat(i,nn), color=col, linewidth=20)
+        ax.plot(np.arange(nn), np.repeat(i,nn), color=col, linewidth=20)
+    ax.set_yticks([0,1,2,3,4])
+    ax.set_yticklabels(label)
     plt.show()
+
+
 
 def haplo_tile_plot(haplos, pop_order=None, bbox_to_anchor=[1.2,1.0]):
     """
@@ -50,7 +56,7 @@ def haplo_tile_plot(haplos, pop_order=None, bbox_to_anchor=[1.2,1.0]):
 
     return fig, ax
 
-def plot_cm(cm, normalize=True, labels=None, figsize=(12,10), path=None):
+def plot_cm(cm, normalize=True, labels=None, figsize=(10,8), path=None):
     plt.figure(figsize=figsize)
     
     # normalize w.r.t. number of samples from class
@@ -74,7 +80,15 @@ def plot_cm(cm, normalize=True, labels=None, figsize=(12,10), path=None):
 
     return fig
 
-def plot_chm(sample_id, msp_df, rm_img=False, img_name="chm_img"):
+def extract_pop_order(output_file):
+        # get model population order from first line of file and convert from numeric predictions
+    with open(output_file, "r") as f:
+        pop = np.array([p.split("=")[0] for p in f.readline().split()[2:]])
+        #return the list of the pop in the right order
+    return pop
+    
+
+def plot_chm(sample_id, msp_df,output_basename,output_file, rm_img=False, img_name="chm_img"):
 
     """
     Wrapper function for plotting with Tagore. 
@@ -82,7 +96,7 @@ def plot_chm(sample_id, msp_df, rm_img=False, img_name="chm_img"):
     """
     
     # defining a color palette
-    palette = sns.color_palette("colorblind").as_hex()
+    palette =sns.color_palette(LAI_PALETTE).as_hex()
     
     # get the base of the tagore style dataframe
     nrows = msp_df.shape[0]
@@ -96,9 +110,11 @@ def plot_chm(sample_id, msp_df, rm_img=False, img_name="chm_img"):
     tagore0 = tagore_base.join(pd.DataFrame({"color": colors0, "chrCopy": 1}))
     tagore1 = tagore_base.join(pd.DataFrame({"color": colors1, "chrCopy": 2}))
     tagore_df = pd.concat([tagore0, tagore1])
+    pop=extract_pop_order(output_file)
+    visualize_palette(pop,palette)
 
     # plot the results
-    tagore_df_fname = "./tagore.tsv"
+    tagore_df_fname = output_basename+"tagore.tsv"
     tagore_df.to_csv(tagore_df_fname, sep="\t", index=False, 
                      header = ['#chr','spos','epos','feature','size','color','ChrCopy'])
     

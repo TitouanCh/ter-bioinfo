@@ -32,7 +32,7 @@ def load_model(path_to_model, verbose=True):
 
     return model
 
-def run_inference(base_args, model, visualize, snp_level=False, bed_file_output=False, verbose=False):
+def run_inference(base_args, model, visualize, snp_level=False, bed_file_output=False, verbose=True):
 
     if verbose:
         print("Loading and processing query file...")
@@ -93,7 +93,7 @@ def run_inference(base_args, model, visualize, snp_level=False, bed_file_output=
         msp_df = pd.read_csv(out_prefix+".msp", sep="\t", skiprows=[0])
         for sample_id in query_vcf_data['samples']:
             sample_path = join_paths(vis_path, sample_id, verb=False)
-            plot_chm(sample_id, msp_df, img_name=sample_path+"/chromosome_painting")
+            plot_chm(sample_id, msp_df,output_path,output_prefix+'.msp', img_name=sample_path+"/chromosome_painting")
 
     return
 
@@ -149,7 +149,7 @@ def get_data(data_path, generations, window_size_cM):
 
     return data, meta
 
-def train_model(config, data_path, verbose):
+def train_model(config, data_path, verbose=True):
 
     # data_path contains - train1/, train2/, val/, metadata, sample_maps/
 
@@ -368,7 +368,6 @@ if __name__ == "__main__":
 
         # process args here...
         verbose = config["verbose"]
-
         if config["simulation"]["splits"]["ratios"].get("val") == 0:
             del config["simulation"]["splits"]["ratios"]["val"]
 
