@@ -16,3 +16,8 @@ HG00308	EUR
 To run the Lai-Net model, got to ./LAI-Net and take a look at lai_net.ipynb. Example from the original repository are available in ./LAI-Net/notebooks.
 
 Further LAI_NET documentation is available at https://github.com/AI-sandbox/LAI-Net.
+
+
+# Artificial Data Labelling
+Converted vcf files and label generated made by the knn are directly avalaible in data/input/artificial/ folders.
+
