@@ -1,4 +1,4 @@
-## ter-bioinfo
+# LAI-NET
 Make sure to install requirements listed in ./LAI-Net/requirements.txt as well as bcftools http://samtools.github.io/bcftools/ to be able to manipulate vcf files.
 
 There's a first script in smap notebook to create reference.smap from the igsr legend file. This will only keep corresponding supercontinent code in a format like this :
