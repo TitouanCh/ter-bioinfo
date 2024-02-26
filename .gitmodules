@@ -1,0 +1,3 @@
+[submodule "LAI-Net"]
+	path = LAI-Net
+	url = git@github.com:MaiDeme/LAI-Net.git
